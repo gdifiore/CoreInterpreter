@@ -1,0 +1,14 @@
+# Core Tokenizer
+
+Files in submission
+---
+README - this file, including instructions on how to run the program
+DOCUMENTATION - contains description of the Tokenizer class design, a user manual, and description of testing
+tokenizer.py - source file containing code behind the tokenizer class implementation in Python3
+
+How to run
+---
+python3 tokenizer.py [test.core]
+
+Source code is passed in as a CLI arg. Usage information will print if a file is not provided, and an error will show if an invalid file is provided.
+Development/testing was completed on Ubuntu, but it only uses the sys package so it should work on any OS without issue.

@@ -1,0 +1,67 @@
+# Core Tokenizer Documentation
+
+User Manual
+---
+Initialize the Tokenizer by passing a valid filepath into the Constructor.
+`tokenizer = Tokenizer(file)`
+
+Then, swap between calling getToken() and skipToken(), checking values however is required.
+
+e.g.
+```
+while True:
+    token = tokenizer.getToken()
+    token_vals.append(token)
+    if token == 33:  # EOF token
+        break
+    tokenizer.skipToken()
+```
+
+Design
+---
+1. Initialization and File Handling:
+   - The Tokenizer class is initialized with a file path
+   - A file handler is created in the constructor, but no lines are read immediately
+   - The class maintains internal state variables to track the current line, current token, and file position
+
+2. Token Processing:
+   - The getToken() method is the main entry point for token processing
+   - If the current stored line is empty, it calls _load_next_line() to read and tokenize the next line from the file
+   - getToken() uses a table-driven approach for token matching:
+     - All valid tokens are stored in a TOKEN_MAP dictionary with their corresponding numeric values
+     - The method checks the current token against reserved words, special symbols, integers, and identifiers
+     - It returns the appropriate token value
+
+3. Line Tokenization:
+   - The tokenizeLine() method breaks down each line into individual tokens
+   - It uses an optimized approach to handle both single-character and two-character operators
+   - Whitespace is preserved as separate tokens, which allows for maintaining the original formatting if needed
+
+4. Token Navigation:
+   - The skipToken() method moves to the next token without returning a value
+   - If the end of the current line is reached, it automatically loads the next line
+
+5. Token Handling:
+   - intVal() method retrieves the value of integer tokens
+   - idName() method retrieves the name of identifier tokens
+   - Both methods include error checking to ensure the current token matches the expected type
+
+6. Helper Functions:
+   - is_identifier() checks if a token is a valid identifier
+   - is_integer() verifies if a token is a valid unsigned integer
+
+Testing
+---
+I made 3 test files:
+1. taken from the project PDF
+2. same as 1, but with added whitespace
+3. random C source code
+
+Expectations:
+1 and 2 parse correctly, 3 will fail on first unknown token (#include).
+
+Testing passed.
+
+Bugs/Missing Features
+---
+None based on my testing.
