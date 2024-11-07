@@ -1,12 +1,12 @@
 - [ ] prog
 - [ ] decl seq
 - [ ] stmt seq
-- [ ] decl
+- [x] decl
 - [x] id list
 - [x] stmt
 - [x] assign
-- [ ] if
-- [ ] loop
+- [x] if
+- [x] loop
 - [x] in
 - [x] out
 - [x] cond
