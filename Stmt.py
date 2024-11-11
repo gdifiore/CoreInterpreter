@@ -1,4 +1,4 @@
-from Interpreter import gTokenizer
+from tokenizer import Tokenizer
 from Assign import Assign
 from If import If
 from Loop import Loop
@@ -13,9 +13,10 @@ class Stmt:
         self.s3 = Loop()
         self.s4 = In()
         self.s5 = Out()
+        
 
     def parseStmt(self):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok not in [5, 8, 32, 10, 11]:
             raise Exception(f"ERROR: Expected identifier, if, while, read, or write but got: {tok}")

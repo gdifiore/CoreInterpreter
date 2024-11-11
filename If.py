@@ -1,6 +1,4 @@
-# if <cond> then <stmt seq> end; | if <cond> then <stmt seq> else <stmt seq> end;
-
-from Interpreter import gTokenizer
+from tokenizer import Tokenizer
 from Cond import Cond
 from StmtSeq import StmtSeq
 
@@ -10,43 +8,44 @@ class If:
         self._Cond = Cond()
         self._StmtSeq1 = StmtSeq()
         self._StmtSeq2 = StmtSeq()
+        
 
     def parse(self):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok != 5:
             raise Exception(f"ERROR: Expected if but got: {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
         self._Cond.parse()
 
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok != 6:
             raise Exception(f"ERROR: Expected then but got: {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
         self._StmtSeq1.parse()
 
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
         if tok == 7:
             self._alternative = 2
-            gTokenizer.skipToken()
+            self.tokenizer.skipToken()
             self._StmtSeq2.parse()
         else:
             self._alternative = 1
 
-        gTokenizer.skipToken()
-        tok = gTokenizer.getToken()
+        self.tokenizer.skipToken()
+        tok = self.tokenizer.getToken()
         if tok != 3:
             raise Exception(f"ERROR: Expected end but got: {tok}")
 
-        gTokenizer.skipToken()
-        tok = gTokenizer.getToken()
+        self.tokenizer.skipToken()
+        tok = self.tokenizer.getToken()
         if tok != 12:
             raise Exception(f"ERROR: Expected ; but got: {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
     def print(self):
         # if <cond> then <stmt seq> end; | if <cond> then <stmt seq> else <stmt seq> end;

@@ -1,5 +1,5 @@
 # <comp> | !<cond> | [<cond> && <cond>] | [<cond> || <cond>]
-from Interpreter import gTokenizer
+from tokenizer import Tokenizer
 from Comp import Comp
 
 class Cond:
@@ -8,37 +8,38 @@ class Cond:
         self._Comp = Comp()
         self._Cond1 = Cond()
         self._Cond2 = Cond()
+        
 
     def parse(self):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok not in [15, 16]:
             self._alternative = 1
             self._Comp.parse()
         elif tok == 15:
             self._alternative = 2
-            gTokenizer.skipToken()
+            self.tokenizer.skipToken()
             self._Cond1.parse()
         elif tok == 16:
-            gTokenizer.skipToken()
+            self.tokenizer.skipToken()
             self._Cond1.parse()
-            gTokenizer.skipToken()
-            tok = gTokenizer.getToken()
+            self.tokenizer.skipToken()
+            tok = self.tokenizer.getToken()
             if tok == 18:
                 self._alternative = 3
             elif tok == 19:
                 self._alternative = 4
             else:
                 raise Exception(f"ERROR: Expected && or || but got: {tok}")
-            gTokenizer.skipToken()
+            self.tokenizer.skipToken()
             self._Cond2.parse()
 
-            gTokenizer.getToken()
+            self.tokenizer.getToken()
 
             if tok != 17:
                 raise Exception(f"ERROR: Expected ] but got: {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
     def print(self):
         if self._alternative == 1:

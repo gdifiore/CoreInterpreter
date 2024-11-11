@@ -1,16 +1,17 @@
-from Interpreter import gTokenizer
+from tokenizer import Tokenizer
 
 class CompOp():
     def __init__(self):
         self._alternative = 0
+        
 
     def parse(self):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok not in [25, 26, 27, 28, 29, 30]:
             raise Exception(f"ERROR: Expected !=, ==, <, >, <=, or >= but got: {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
         self._alternative = tok - 24
 
     def print(self):

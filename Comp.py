@@ -1,5 +1,5 @@
 # <comp> ::= (<op> <comp op> <op>)
-from Interpreter import gTokenizer
+from tokenizer import Tokenizer
 from Op import Op
 from CompOp import CompOp
 
@@ -8,22 +8,23 @@ class Comp:
         self._Op1 = Op()
         self._CompOp = CompOp()
         self._Op2 = Op()
+        
 
     def parse(self):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok != 20:
             raise Exception(f"ERROR: Expected ( but got: {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
         self._Op1.parse()
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
         self._CompOp.parse()
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
         self._Op2.parse()
 

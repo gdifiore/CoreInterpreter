@@ -1,4 +1,4 @@
-from Interpreter import gTokenizer
+from tokenizer import Tokenizer
 from Id import Id
 from Exp import Exp
 
@@ -8,27 +8,27 @@ class Op():
         self._int = None
         self._Id = Id()
         self._Exp = Exp()
-
+        
 
     def parse(self):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok not in [31, 32, 20]:
             raise Exception(f"ERROR: Expected int, exp, or ( but got: {tok}")
 
         if tok == 31:
-            self._int = gTokenizer.intVal()
-            gTokenizer.skipToken()
+            self._int = self.tokenizer.intVal()
+            self.tokenizer.skipToken()
         elif tok == 32:
             self.Id = Id.parseId2() # stmt_seq
         else:
-            gTokenizer.skipToken()
+            self.tokenizer.skipToken()
             self._exp = Exp()
             self._exp.parseExp()
-            tok = gTokenizer.getToken()
+            tok = self.tokenizer.getToken()
             if tok != 21:
                 raise Exception(f"ERROR: Expected ) but got: {tok}")
-            gTokenizer.skipToken()
+            self.tokenizer.skipToken()
 
     def print(self):
         if self._alternative == 1:

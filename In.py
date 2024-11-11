@@ -1,27 +1,30 @@
-from Interpreter import gTokenizer, gDataFile
+from tokenizer import Tokenizer
 from IdList import IdList
+import sys
 
 class In:
     def __init__(self):
         self._id_list = IdList()
-        self._file = gDataFile
+        
+        if sys.argv[2]:
+            self._file = sys.argv[2]
 
     def parse(self):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok != 10:
             raise Exception(f"ERROR: Expected read but got: {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
         self._id_list.parse(False)
 
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok != 12:
             raise Exception(f"ERROR: Expected ;, got {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
     def print(self):
         print("read", end='')

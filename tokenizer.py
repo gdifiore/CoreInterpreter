@@ -63,6 +63,7 @@ class Tokenizer:
     def __init__(self, core_file):
         self._core_file = core_file
         self._file_handle = open(core_file, encoding="utf-8")
+        # Initialize other variables as per original constructor
         self._file_line_index = 0
         self._current_line = []
         self._current_line_index = 0

@@ -1,15 +1,15 @@
-from Interpreter import gTokenizer
+from tokenizer import Tokenizer
 from Id import Id
 
 class IdList:
     _id: Id = None
     _idList = None
 
-    def __init__():
-        pass
+    def __init__(self):
+        
 
     def parse(self, isDeclared):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         # error check for the id token
         if tok != 32:
@@ -21,7 +21,7 @@ class IdList:
         else:
             self._id = Id.parseId2()
 
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok != 12 or tok != 13:
             print("Error: Expected , or ;, got " + str(tok))
@@ -30,7 +30,7 @@ class IdList:
         # comma or semicolon
         # comma keep reading, semicolon means list is over
         if tok == 13:
-            gTokenizer.skipToken()
+            self.tokenizer.skipToken()
             self._idList = IdList()
             self._idList.parseIdList(isDeclared)
         elif tok == 12:

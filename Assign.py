@@ -1,5 +1,5 @@
 # <id> = <exp>;
-from Interpreter import gTokenizer
+from tokenizer import Tokenizer
 from Id import Id
 from Exp import Exp
 
@@ -7,32 +7,33 @@ class Assign:
     def __init__(self):
         self._id = Id()
         self._exp = Exp()
+        
 
     def parse(self):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok != 32:
             raise Exception(f"ERROR: Expected identifier but got: {tok}")
 
         self._id.parseId2() # stmt_seq uses parseId2
 
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok != 14:
             raise Exception(f"ERROR: Expected = but got: {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
         self._exp.parse()
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         if tok != 12:
             raise Exception(f"ERROR: Expected ;, got {tok}")
 
-        gTokenizer.skipToken()
+        self.tokenizer.skipToken()
 
     def print(self):
         self._id.print()

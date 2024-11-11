@@ -1,4 +1,4 @@
-from Interpreter import gTokenizer
+from tokenizer import Tokenizer
 from Fac import Fac
 
 class Exp:
@@ -6,18 +6,19 @@ class Exp:
         self._alternative = 0
         self._Fac = Fac()
         self._Exp = Exp()
+        
 
     def parse(self):
-        tok = gTokenizer.getToken()
+        tok = self.tokenizer.getToken()
 
         self._Fac.parse()
 
-        gTokenizer.skipToken()
-        tok = gTokenizer.getToken()
+        self.tokenizer.skipToken()
+        tok = self.tokenizer.getToken()
 
         if tok in [22, 23]:
             self._alternative = tok - 20
-            gTokenizer.skipToken()
+            self.tokenizer.skipToken()
 
             self._Exp.parse()
         else:
