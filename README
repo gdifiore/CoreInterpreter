@@ -1,14 +1,17 @@
-# Core Tokenizer
+# Core Interpreter
 
 Files in submission
 ---
 README - this file, including instructions on how to run the program
-DOCUMENTATION - contains description of the Tokenizer class design, a user manual, and description of testing
+docs/DOCUMENTATION - contains description of the Tokenizer class design, a user manual, and description of testing
 tokenizer.py - source file containing code behind the tokenizer class implementation in Python3
+Interpreter.py - source file containing code for the Parser/Printer/Excecutor for each class specified in the BNF
 
 How to run
 ---
-python3 tokenizer.py [test.core]
+python3 Interpreter.py [test.core] [test.data]
 
-Source code is passed in as a CLI arg. Usage information will print if a file is not provided, and an error will show if an invalid file is provided.
-Development/testing was completed on Ubuntu, but it only uses the sys package so it should work on any OS without issue.
+Source code and any input data are passed in as a CLI arg. If `read` is called and no data file was provided, it will print an error and exit.
+
+Usage information will print if a file is not provided, and an error will show if an invalid file is provided.
+Development/testing was completed on Ubuntu, but it only uses the sys & os packages so it should work on any OS without issue.

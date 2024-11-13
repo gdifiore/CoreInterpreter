@@ -1,6 +1,6 @@
-- [ ] prog
-- [ ] decl seq
-- [ ] stmt seq
+- [x] prog
+- [x] decl seq
+- [x] stmt seq
 - [x] decl
 - [x] id list
 - [x] stmt
@@ -18,3 +18,6 @@
 - [x] id
 
 
+try and make every class use __init__
+check rubric
+documentation?

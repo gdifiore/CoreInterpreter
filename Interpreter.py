@@ -8,13 +8,13 @@ gFile = None
 class Prog():
     def __init__(self):
         self._DS = None
-        self.SS = None
+        self._SS = None
 
     def parse(self):
         tok = gTokenizer.getToken()
 
         if tok != 1:
-            raise Exception(f"ERROR: Expected program but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected program but got: {tok}")
 
         gTokenizer.skipToken()
         self._DS = DeclSeq()
@@ -22,7 +22,7 @@ class Prog():
 
         tok = gTokenizer.getToken()
         if tok != 2:
-            raise Exception(f"ERROR: Expected begin but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected begin but got: {tok}")
 
         gTokenizer.skipToken()
         self._SS = StmtSeq()
@@ -30,24 +30,23 @@ class Prog():
 
         tok = gTokenizer.getToken()
         if tok != 3:
-            raise Exception(f"ERROR: Expected end but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected end but got: {tok}")
 
         gTokenizer.skipToken()
 
         tok = gTokenizer.getToken()
         if tok != 33:
-            raise Exception(f"ERROR: Expected EOF but got: {tok}")
-
-        return
+            raise Exception(f"{type(self).__name__} ERROR: Expected EOF but got: {tok}")
 
     def print(self):
-        print("program ", end="")
+        print("program\n", end="")
         self._DS.print()
-        print(" begin")
+        print("\nbegin")
         self._SS.print()
-        print("\nend\n", end = "")
+        print("end\n", end = "")
 
     def exec(self):
+        print("\n\nProgram Output:")
         self._SS.exec()
 
 class DeclSeq():
@@ -63,12 +62,11 @@ class DeclSeq():
 
         # error check for int or begin token
         if tok not in [4, 2]:
-            raise Exception(f"ERROR: Expected int or begin but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected int or begin but got: {tok}")
 
         if tok == 4:
             self._DS = DeclSeq()
             self._DS.parse()
-
 
     def print(self):
         self._Decl.print()
@@ -87,7 +85,7 @@ class StmtSeq():
         tok = gTokenizer.getToken()
 
         if tok not in [5, 8, 10, 11, 32, 3, 7]:
-            raise Exception(f"ERROR: Expected if, while, read, write, id, end, or else, got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected if, while, read, write, id, end, or else, got: {tok}")
 
         # check for another statement
         if tok in [5, 8, 32, 10, 11]:
@@ -112,7 +110,7 @@ class Decl():
         tok = gTokenizer.getToken()
 
         if tok != 4:
-            raise Exception(f"ERROR: Expected int got {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected int got {tok}")
 
         gTokenizer.skipToken()
 
@@ -122,7 +120,7 @@ class Decl():
         tok = gTokenizer.getToken()
 
         if tok != 12:
-            raise Exception(f"ERROR: Expected ; got {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected ; got {tok}")
 
         gTokenizer.skipToken()
 
@@ -132,18 +130,16 @@ class Decl():
         print(";", end= '')
 
 class IdList():
-    _id = None
-    _idList = None
-
     def __init__(self):
-        pass
+        self._id = None
+        self._idList = None
 
     def parse(self, isDeclared):
         tok = gTokenizer.getToken()
 
         # error check for the id token
         if tok != 32:
-            raise Exception(f"ERROR: Expected Id but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected Id but got: {tok}")
 
         # DS or SS parsing
         if isDeclared:
@@ -187,17 +183,17 @@ class IdList():
 class Stmt():
     def __init__(self):
         self._alternative = 0
-        self.s1 = None
-        self.s2 = None
-        self.s3 = None
-        self.s4 = None
-        self.s5 = None
+        self.s1 = None # assign
+        self.s2 = None # if
+        self.s3 = None # loop
+        self.s4 = None # in
+        self.s5 = None # out
 
     def parse(self):
         tok = gTokenizer.getToken()
 
         if tok not in [5, 8, 32, 10, 11]:
-            raise Exception(f"ERROR: Expected identifier, if, while, read, or write but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected identifier, if, while, read, or write but got: {tok}")
 
         if tok == 32: # assign
             self._alternative = 1
@@ -245,8 +241,9 @@ class Stmt():
             self.s5.exec()
 
 class Assign():
-    _id = None
-    _exp = None
+    def __init__(self):
+        self._id = None
+        self._exp = None
 
     def parse(self):
         self._id = Id.parseId2() # stmt_seq uses parseId2
@@ -254,7 +251,7 @@ class Assign():
         tok = gTokenizer.getToken()
 
         if tok != 14:
-            raise Exception(f"ERROR: Expected = but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected = but got: {tok}")
 
         gTokenizer.skipToken()
 
@@ -264,7 +261,7 @@ class Assign():
         tok = gTokenizer.getToken()
 
         if tok != 12:
-            raise Exception(f"ERROR: Expected ;, got {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected ;, got {tok}")
 
         gTokenizer.skipToken()
 
@@ -288,7 +285,7 @@ class If():
         tok = gTokenizer.getToken()
 
         if tok != 5:
-            raise Exception(f"ERROR: Expected if but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected if but got: {tok}")
 
         gTokenizer.skipToken()
         self._Cond = Cond()
@@ -297,7 +294,7 @@ class If():
         tok = gTokenizer.getToken()
 
         if tok != 6:
-            raise Exception(f"ERROR: Expected then but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected then but got: {tok}")
 
         gTokenizer.skipToken()
         self._StmtSeq1 = StmtSeq()
@@ -314,25 +311,24 @@ class If():
 
         tok = gTokenizer.getToken()
         if tok != 3:
-            raise Exception(f"ERROR: Expected end but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected end but got: {tok}")
 
         gTokenizer.skipToken()
         tok = gTokenizer.getToken()
         if tok != 12:
-            raise Exception(f"ERROR: Expected ; but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected ; but got: {tok}")
 
         gTokenizer.skipToken()
 
     def print(self):
-        # if <cond> then <stmt seq> end; | if <cond> then <stmt seq> else <stmt seq> end;
         print("if ", end='')
         self._Cond.print()
         print(" then ", end='')
         self._StmtSeq1.print()
         if self._alternative == 2:
-            print(" else ", end='')
+            print("else ", end='')
             self._StmtSeq2.print()
-        print(" end;")
+        print("end;")
 
     def exec(self):
         if self._Cond.exec():
@@ -350,7 +346,7 @@ class Loop():
         tok = gTokenizer.getToken()
 
         if tok != 8:
-            raise Exception(f"ERROR: Expected while but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected while but got: {tok}")
 
         gTokenizer.skipToken()
         self._Cond = Cond()
@@ -359,7 +355,7 @@ class Loop():
         tok = gTokenizer.getToken()
 
         if tok != 9:
-            raise Exception(f"ERROR: Expected loop but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected loop but got: {tok}")
 
         gTokenizer.skipToken()
         self._StmtSeq = StmtSeq()
@@ -367,21 +363,21 @@ class Loop():
 
         tok = gTokenizer.getToken()
         if tok != 3:
-            raise Exception(f"ERROR: Expected end but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected end but got: {tok}")
 
         gTokenizer.skipToken()
         tok = gTokenizer.getToken()
         if tok != 12:
-            raise Exception(f"ERROR: Expected ; but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected ; but got: {tok}")
 
         gTokenizer.skipToken()
 
     def print(self):
         print("while ", end='')
         self._Cond.print()
-        print(" loop ", end='')
+        print(" loop\n", end='')
         self._StmtSeq.print()
-        print(" end;")
+        print("end;")
 
     def exec(self):
         while(self._Cond.exec()):
@@ -395,7 +391,7 @@ class In():
         tok = gTokenizer.getToken()
 
         if tok != 10:
-            raise Exception(f"ERROR: Expected read but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected read but got: {tok}")
 
         gTokenizer.skipToken()
 
@@ -404,7 +400,7 @@ class In():
         tok = gTokenizer.getToken()
 
         if tok != 12:
-            raise Exception(f"ERROR: Expected ;, got {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected ;, got {tok}")
 
         gTokenizer.skipToken()
 
@@ -424,7 +420,7 @@ class Out():
         tok = gTokenizer.getToken()
 
         if tok != 11:
-            raise Exception(f"ERROR: Expected write but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected write but got: {tok}")
 
         gTokenizer.skipToken()
 
@@ -434,7 +430,7 @@ class Out():
         tok = gTokenizer.getToken()
 
         if tok != 12:
-            raise Exception(f"ERROR: Expected ;, got {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected ;, got {tok}")
 
         gTokenizer.skipToken()
 
@@ -467,24 +463,29 @@ class Cond():
             self._Cond1.parse()
         elif tok == 16:
             gTokenizer.skipToken()
+
             self._Cond1 = Cond()
             self._Cond1.parse()
+
             gTokenizer.skipToken()
             tok = gTokenizer.getToken()
+
             if tok == 18:
                 self._alternative = 3
             elif tok == 19:
                 self._alternative = 4
             else:
-                raise Exception(f"ERROR: Expected && or || but got: {tok}")
+                raise Exception(f"{type(self).__name__} ERROR: Expected && or || but got: {tok}")
+
             gTokenizer.skipToken()
+
             self._Cond2 = Cond()
             self._Cond2.parse()
 
             gTokenizer.getToken()
 
             if tok != 17:
-                raise Exception(f"ERROR: Expected ] but got: {tok}")
+                raise Exception(f"{type(self).__name__} ERROR: Expected ] but got: {tok}")
 
         gTokenizer.skipToken()
 
@@ -528,7 +529,7 @@ class Comp():
         tok = gTokenizer.getToken()
 
         if tok != 20:
-            raise Exception(f"ERROR: Expected ( but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected ( but got: {tok}")
 
         gTokenizer.skipToken()
 
@@ -543,7 +544,7 @@ class Comp():
 
         tok = gTokenizer.getToken()
         if tok != 21:
-            raise Exception(f"ERROR: Expected ) but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected ) but got: {tok}")
 
         gTokenizer.skipToken()
 
@@ -571,7 +572,8 @@ class Comp():
         elif self._CompOp._alternative == 6:
             return left_val >= right_val
         else:
-            raise Exception(f"Invalid comparison operator: {self._CompOp._alternative}")
+            raise Exception(f"{type(self).__name__} Invalid comparison operator: {self._CompOp._alternative}")
+
 class Exp():
     def __init__(self):
         self._alternative = 0
@@ -591,9 +593,9 @@ class Exp():
         self._alternative = tok - 20
 
         gTokenizer.skipToken()
+
         self._Exp = Exp()
         self._Exp.parse()
-
 
     def print(self):
         self._Fac.print()
@@ -652,7 +654,7 @@ class Op():
         tok = gTokenizer.getToken()
 
         if tok not in [31, 32, 20]:
-            raise Exception(f"ERROR: Expected int, exp, or ( but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected int, exp, or ( but got: {tok}")
 
         if tok == 31:
             self._int = gTokenizer.intVal()
@@ -665,7 +667,7 @@ class Op():
             self._Exp.parse()
             tok = gTokenizer.getToken()
             if tok != 21:
-                raise Exception(f"ERROR: Expected ) but got: {tok}")
+                raise Exception(f"{type(self).__name__} ERROR: Expected ) but got: {tok}")
             gTokenizer.skipToken()
 
     def print(self):
@@ -694,7 +696,7 @@ class CompOp():
         tok = gTokenizer.getToken()
 
         if tok not in [25, 26, 27, 28, 29, 30]:
-            raise Exception(f"ERROR: Expected !=, ==, <, >, <=, or >= but got: {tok}")
+            raise Exception(f"{type(self).__name__} ERROR: Expected !=, ==, <, >, <=, or >= but got: {tok}")
 
         gTokenizer.skipToken()
         self._alternative = tok - 24
@@ -726,12 +728,11 @@ class Id():
         self._initialized = False
 
     @classmethod
-    # one of these sets declared to True
     def parseId1(cls):
         tok = gTokenizer.getToken()
 
         if tok != 32:
-            raise Exception(f"ERROR: Expected Id but got: {tok}")
+            raise Exception(f"{type(cls).__name__} ERROR: Expected Id but got: {tok}")
 
         name = gTokenizer.idName()
         gTokenizer.skipToken()
@@ -739,7 +740,7 @@ class Id():
         # search for existing Id
         for k in range(cls._idCount):
             if cls._eIds[k] is not None and cls._eIds[k]._name == name:
-                raise Exception(f"ERROR: Double declaration {name} has already been declared.")
+                raise Exception(f"{type(cls).__name__} ERROR: Double declaration {name} has already been declared.")
 
         # create a new Id instance and add to eIds
         if cls._idCount < len(cls._eIds):
@@ -755,57 +756,56 @@ class Id():
         tok = gTokenizer.getToken()
 
         if tok != 32:
-            raise Exception(f"ERROR: Expected Id but got: {tok}")
+            raise Exception(f"{type(cls).__name__} ERROR: Expected Id but got: {tok}")
 
         name = gTokenizer.idName()
         gTokenizer.skipToken()
 
-        # Search for an existing Id instance with the same name
-        # is this right??
+        # search for an existing Id instance with the same name
         for k in range(cls._idCount):
             if cls._eIds[k] is not None and cls._eIds[k]._name == name:
                 return cls._eIds[k]
 
-        raise Exception(f"ERROR: Undeclared variable {name} has not been declared.")
+        raise Exception(f"{type(cls).__name__} ERROR: Undeclared variable {name} has not been declared.")
 
     def exec(self):
         self.getIdVal()
 
     def print(self):
         if not self._declared:
-            raise Exception(f"ERROR: Id not declared.")
+            raise Exception(f"{type(self).__name__} ERROR: Id not declared.")
         print(self._name, end='')
 
     def getIdVal(self):
         if not self._initialized:
-            raise Exception(f"ERROR: Attempted to use value of variable {self._name} before initializing.")
+            raise Exception(f"{type(self).__name__} ERROR: Attempted to use value of variable {self._name} before initializing.")
         return self._val;
 
     def setIdVal(self, new_val):
         if not self._declared:
-            raise Exception(f"ERROR: Id not declared.")
+            raise Exception(f"{type(self).__name__} ERROR: Id not declared.")
         self._val = new_val
         self._initialized = True
 
-    def getIdName(self):
-        if not self._declared:
-            raise Exception(f"ERROR: Id not declared.")
-        return self._name
-
     def readId(self):
         if not self._declared:
-            raise Exception(f"ERROR: Id not declared.")
+            raise Exception(f"{type(self).__name__} ERROR: Id not declared.")
 
-        val = gFile.readline()
+        # passing data file is optional, so handle case where it's needed but user didn't pass in
+        try:
+            val = gFile.readline()
+        except Exception as e:
+            print(f"{type(self).__name__} ERROR: Did you mean to pass an input file?: {e}")
+            exit(1)
 
         if len(val) <= 0:
-            raise Exception(f"ERROR: Input file is empty.")
+            raise Exception(f"{type(self).__name__} ERROR: Input file is empty.")
 
         try:
             self._val = int(val)
             self._initialized = True
         except ValueError:
-            raise ValueError(f"ERROR: Expected int got: {val}.")
+            raise ValueError(f"{type(self).__name__} ERROR: Expected int got: {val}.")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or len(sys.argv) > 3:
@@ -813,7 +813,7 @@ if __name__ == "__main__":
         exit(1)
 
     file = sys.argv[1]
-    data = sys.argv[2] if len(sys.argv) == 3 else None  # Only set `data` if it exists
+    data = sys.argv[2] if len(sys.argv) == 3 else None  # only set `data` if it exists
 
     if not os.path.exists(file):
         print(f"ERROR: File '{file}' does not exist.")

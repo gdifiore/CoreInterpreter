@@ -1,0 +1,34 @@
+program
+int A, B, C, SUM, COUNT, MAXVALUE, INPUTVAL;
+begin
+    read A;
+    read B;
+
+    SUM = 0;
+    COUNT = 0;
+
+    if (A > B) then MAXVALUE = A;
+    else MAXVALUE = B; end;
+
+    while (A != B) loop
+        if (A > B) then A = A - B;
+        else B = B - A; end;
+    end;
+
+    write A;
+
+    read C;
+
+    while (COUNT < C) loop
+        read INPUTVAL;
+        write INPUTVAL;
+        SUM = SUM + INPUTVAL;
+        COUNT = COUNT + 1;
+    end;
+
+    write SUM;
+
+    if (SUM > MAXVALUE) then MAXVALUE = SUM; end;
+
+    write MAXVALUE;
+end
