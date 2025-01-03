@@ -16,8 +16,3 @@
 - [x] op
 - [x] comp op
 - [x] id
-
-
-try and make every class use __init__
-check rubric
-documentation?
